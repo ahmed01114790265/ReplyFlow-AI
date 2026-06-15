@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Folder Include="Controllers\" />
     <Folder Include="Features\Auth\" />
     <Folder Include="Features\Credits\" />
     <Folder Include="Features\AI\" />
