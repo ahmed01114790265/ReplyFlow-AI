@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
     <Folder Include="Features\Auth\" />
     <Folder Include="Features\Credits\" />
     <Folder Include="Features\AI\" />
@@ -20,6 +19,7 @@
     <Folder Include="Shared\HttpClient Factory\" />
     <Folder Include="Shared\Logging\" />
     <Folder Include="Shared\MediatR pipeline\" />
+    <Folder Include="Shared\MainViews\" />
     <Folder Include="Shared\Result Wrapper\" />
   </ItemGroup>
 
