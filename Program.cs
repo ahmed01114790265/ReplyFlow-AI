@@ -17,9 +17,11 @@ builder.Services.AddDbContext<ReplyFlowDbContext>(options =>
 // MediatR
 builder.Services.AddMediatR(cfg =>
 {
-    cfg.RegisterServicesFromAssembly(typeof(Program).Assembly);
+    cfg.RegisterServicesFromAssemblies(
+        typeof(ReplyFlowDbContext).Assembly,
+        typeof(Program).Assembly
+    );
 });
-
 // HttpClient (for OpenAI / WhatsApp)
 builder.Services.AddHttpClient();
 
@@ -39,7 +41,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-app.UseAuthentication();
+
 app.UseAuthorization();
 
 // MVC Route
