@@ -10,7 +10,6 @@
     <Folder Include="Features\Credits\" />
     <Folder Include="Features\AI\" />
     <Folder Include="Features\Dashboard\" />
-    <Folder Include="Features\Leads\" />
     <Folder Include="Features\Notifications\" />
     <Folder Include="Features\Payments\" />
     <Folder Include="Features\WhatsApp\" />

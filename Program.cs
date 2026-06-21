@@ -1,10 +1,22 @@
-using Microsoft.EntityFrameworkCore;
-using ReplyFlow.Shared.Persistence;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
+using ReplyFlow.Features.Leads.Comman.Mapping;
+using ReplyFlow.Shared.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
+//Register in DI
+builder.Services.AddScoped<IBusinessTypeFactory, BusinessTypeFactory>();
 
 // MVC
+builder.Services.Configure<Microsoft.AspNetCore.Mvc.Razor.RazorViewEngineOptions>(options =>
+{
+    // Clear out or prepend the new vertical slice formats
+    // {1} is the Controller/Feature name, {0} is the View name
+    options.ViewLocationFormats.Clear();
+    options.ViewLocationFormats.Add("/Features/{1}/{0}.cshtml");
+    options.ViewLocationFormats.Add("/Features/{1}/{1}.cshtml"); // Match folder name
+    options.ViewLocationFormats.Add("/Features/Shared/{0}.cshtml");
+});
 builder.Services.AddControllersWithViews();
 
 // DB Context
@@ -41,12 +53,11 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-
+app.UseAuthentication();
 app.UseAuthorization();
 
-// MVC Route
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Lead}/{action=Create}/{id?}");
 
 app.Run();
