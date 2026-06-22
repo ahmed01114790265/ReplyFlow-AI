@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using ReplyFlow.Features.Leads.Comman.Enums;
+﻿using ReplyFlow.Features.Leads.Comman.Enums;
 using System.ComponentModel.DataAnnotations;
 
 namespace ReplyFlow.Features.Leads.CreateLead

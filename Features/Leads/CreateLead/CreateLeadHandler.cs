@@ -1,7 +1,7 @@
 ﻿using MediatR;
+using Microsoft.EntityFrameworkCore;
 using ReplyFlow.Features.Leads.Entity;
 using ReplyFlow.Shared.Persistence;
-using Microsoft.EntityFrameworkCore;
 
 namespace ReplyFlow.Features.Leads.CreateLead
 {
@@ -37,7 +37,7 @@ namespace ReplyFlow.Features.Leads.CreateLead
             _db.Leads.Add(lead);
             await _db.SaveChangesAsync(cancellationToken);
 
-            return  new CreateLeadResult(lead.Id, false);
+            return new CreateLeadResult(lead.Id, false);
         }
     }
 }

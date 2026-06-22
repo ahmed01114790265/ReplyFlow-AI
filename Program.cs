@@ -10,11 +10,16 @@ builder.Services.AddScoped<IBusinessTypeFactory, BusinessTypeFactory>();
 // MVC
 builder.Services.Configure<Microsoft.AspNetCore.Mvc.Razor.RazorViewEngineOptions>(options =>
 {
-    // Clear out or prepend the new vertical slice formats
-    // {1} is the Controller/Feature name, {0} is the View name
     options.ViewLocationFormats.Clear();
-    options.ViewLocationFormats.Add("/Features/{1}/{0}.cshtml");
-    options.ViewLocationFormats.Add("/Features/{1}/{1}.cshtml"); // Match folder name
+
+    // 1. Precise Feature Path: /Features/Leads/CreateLead/Create.cshtml
+    // Since {1} is "Lead" and {0} is "Create", we combine them to look inside "CreateLead"
+    options.ViewLocationFormats.Add("/Features/Leads/{0}{1}/{0}.cshtml"); // Searches: /Features/Leads/CreateLead/Create.cshtml
+
+    // 2. Fallback for features that don't have a prefixing verb (e.g., Index, Details)
+    options.ViewLocationFormats.Add("/Features/Leads/{1}/{0}.cshtml");
+
+    // 3. Shared layout fallback (if your _Layout.cshtml or partials live in a shared features folder)
     options.ViewLocationFormats.Add("/Features/Shared/{0}.cshtml");
 });
 builder.Services.AddControllersWithViews();
