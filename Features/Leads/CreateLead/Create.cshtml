@@ -1,0 +1,82 @@
+﻿@model ReplyFlow.Features.Leads.CreateLead.CreateLeadViewModel
+@{
+    ViewData["Title"] = "Get Started";
+}
+@if (ViewBag.BusinessTypes == null)
+{
+    <div class="alert alert-danger py-2 small">
+        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+        Developer Error: ViewBag.BusinessTypes is null! Check your controller action setup.
+    </div>
+}
+else
+{
+    <div class="mb-4">
+        <label asp-for="BusinessType" class="form-label fw-semibold text-secondary small">Business Type</label>
+        <div class="input-group">
+            <span class="input-group-text bg-light text-muted"><i class="bi bi-briefcase"></i></span>
+            <select asp-for="BusinessType"
+                    asp-items="(IEnumerable<SelectListItem>)ViewBag.BusinessTypes"
+                    class="form-select">
+                <option value="" disabled selected>Select your industry</option>
+            </select>
+        </div>
+        <span asp-validation-for="BusinessType" class="text-danger small mt-1 d-block"></span>
+    </div>
+}
+<div class="card border-0 shadow-sm p-4 p-sm-5 bg-white rounded-3">
+    <div class="text-center mb-4">
+        <h2 class="fw-bold text-dark">Get Started</h2>
+        <p class="text-muted small">Fill out the quick details below and our team will get right back to you.</p>
+    </div>
+
+    <form asp-action="Create" method="post" novalidate>
+        
+        <!-- Full Name Group -->
+        <div class="mb-3">
+            <label asp-for="Name" class="form-label fw-semibold text-secondary small">Full Name</label>
+            <div class="input-group">
+                <span class="input-group-text bg-light text-muted"><i class="bi bi-person"></i></span>
+                <input asp-for="Name" class="form-control" placeholder="e.g. John Doe" />
+            </div>
+            <span asp-validation-for="Name" class="text-danger small mt-1 d-block"></span>
+        </div>
+
+        <!-- Phone Number Group -->
+        <div class="mb-3">
+            <label asp-for="Phone" class="form-label fw-semibold text-secondary small">Phone Number</label>
+            <div class="input-group">
+                <span class="input-group-text bg-light text-muted"><i class="bi bi-telephone"></i></span>
+                <input asp-for="Phone" class="form-control" placeholder="e.g. +20 123 456 7890" />
+            </div>
+            <span asp-validation-for="Phone" class="text-danger small mt-1 d-block"></span>
+        </div>
+
+        <!-- Business Type Group -->
+        <select asp-for="BusinessType"
+                asp-items="(IEnumerable<SelectListItem>)ViewBag.BusinessTypes"
+                class="form-select">
+            <option value="" disabled selected>Select your industry</option>
+        </select>
+
+        <!-- Action Button -->
+        <div class="d-grid mt-2">
+            <button type="submit" class="btn btn-primary btn-lg fw-semibold shadow-sm py-2fs-6">
+                Submit Request <i class="bi bi-arrow-right ms-1"></i>
+            </button>
+        </div>
+    </form>
+
+    <!-- Context Messages -->
+    @if (ViewBag.Message != null)
+    {
+        <div class="alert alert-info border-0 mt-4 d-flex align-items-center" role="alert">
+            <i class="bi bi-info-circle-fill me-2 fs-5"></i>
+            <div>@ViewBag.Message</div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

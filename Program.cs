@@ -1,10 +1,27 @@
-using Microsoft.EntityFrameworkCore;
-using ReplyFlow.Shared.Persistence;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
+using ReplyFlow.Features.Leads.Comman.Mapping;
+using ReplyFlow.Shared.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
+//Register in DI
+builder.Services.AddScoped<IBusinessTypeFactory, BusinessTypeFactory>();
 
 // MVC
+builder.Services.Configure<Microsoft.AspNetCore.Mvc.Razor.RazorViewEngineOptions>(options =>
+{
+    options.ViewLocationFormats.Clear();
+
+    // 1. Precise Feature Path: /Features/Leads/CreateLead/Create.cshtml
+    // Since {1} is "Lead" and {0} is "Create", we combine them to look inside "CreateLead"
+    options.ViewLocationFormats.Add("/Features/Leads/{0}{1}/{0}.cshtml"); // Searches: /Features/Leads/CreateLead/Create.cshtml
+
+    // 2. Fallback for features that don't have a prefixing verb (e.g., Index, Details)
+    options.ViewLocationFormats.Add("/Features/Leads/{1}/{0}.cshtml");
+
+    // 3. Shared layout fallback (if your _Layout.cshtml or partials live in a shared features folder)
+    options.ViewLocationFormats.Add("/Features/Shared/{0}.cshtml");
+});
 builder.Services.AddControllersWithViews();
 
 // DB Context
@@ -41,12 +58,11 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-
+app.UseAuthentication();
 app.UseAuthorization();
 
-// MVC Route
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Lead}/{action=Create}/{id?}");
 
 app.Run();
