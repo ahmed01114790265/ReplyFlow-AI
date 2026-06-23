@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ReplyFlow.Features.Auth.Entites;
+using ReplyFlow.Features.Leads.Entities;
 
 namespace ReplyFlow.Shared.Persistence
 {
@@ -10,7 +11,7 @@ namespace ReplyFlow.Shared.Persistence
             : base(options)
         {
         }
-        public DbSet<User> Users => Set<User>();
+        public DbSet<Lead> Leads=> Set<Lead>();
         protected override void OnModelCreating(
             ModelBuilder modelBuilder)
         {

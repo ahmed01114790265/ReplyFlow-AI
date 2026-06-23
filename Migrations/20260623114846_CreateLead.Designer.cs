@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ReplyFlow.Shared.Persistence;
 
@@ -11,9 +12,11 @@ using ReplyFlow.Shared.Persistence;
 namespace ReplyFlow.Migrations
 {
     [DbContext(typeof(ReplyFlowDbContext))]
-    partial class ReplyFlowDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260623114846_CreateLead")]
+    partial class CreateLead
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
