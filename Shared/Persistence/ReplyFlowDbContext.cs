@@ -12,6 +12,7 @@ namespace ReplyFlow.Shared.Persistence
         {
         }
         public DbSet<Lead> Leads=> Set<Lead>();
+        public DbSet<User> Users => Set<User>();
         protected override void OnModelCreating(
             ModelBuilder modelBuilder)
         {
