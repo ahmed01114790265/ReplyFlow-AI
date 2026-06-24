@@ -1,0 +1,43 @@
+﻿@using ReplyFlow.Features.Leads.Enums
+@model ReplyFlow.Features.Leads.ViewModels.CreateLeadViewModel
+
+@{
+    ViewData["Title"] = "Create Lead";
+}
+
+<h2>Create Lead</h2>
+
+<form asp-action="Create" method="post">
+
+    <div class="mb-3">
+        <label asp-for="Name" class="form-label">Name</label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Phone" class="form-label">Phone</label>
+        <input asp-for="Phone" class="form-control" />
+        <span asp-validation-for="Phone" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="BusinessType" class="form-label">Business Type</label>
+        <select asp-for="BusinessType" class="form-select">
+            <option value="">-- Select Business Type --</option>
+            @foreach (var item in Enum.GetValues(typeof(BusinessType)).Cast<BusinessType>())
+            {
+                <option value="@((int)item)">@item.ToString()</option>
+            }
+        </select>
+        <span asp-validation-for="BusinessType" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+
+</form>
+
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial" />
+}

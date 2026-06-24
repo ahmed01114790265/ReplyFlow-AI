@@ -1,31 +1,30 @@
-using Microsoft.EntityFrameworkCore;
-using ReplyFlow.Shared.Persistence;
+using FluentValidation;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
+using ReplyFlow.Features.Leads.Handlers;
+using ReplyFlow.Features.Leads.Validations;
+using ReplyFlow.Shared.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// MVC
 builder.Services.AddControllersWithViews();
 
-// DB Context
 builder.Services.AddDbContext<ReplyFlowDbContext>(options =>
 {
     options.UseSqlServer(
         builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
-// MediatR
 builder.Services.AddMediatR(cfg =>
 {
-    cfg.RegisterServicesFromAssemblies(
-        typeof(ReplyFlowDbContext).Assembly,
-        typeof(Program).Assembly
-    );
+    cfg.RegisterServicesFromAssembly(
+        typeof(CreateLeadHandler).Assembly);
 });
-// HttpClient (for OpenAI / WhatsApp)
+
+builder.Services.AddValidatorsFromAssemblyContaining<CreateLeadValidator>();
+
 builder.Services.AddHttpClient();
 
-// Auth (later Identity if needed)
 builder.Services.AddAuthorization();
 
 var app = builder.Build();
@@ -37,16 +36,16 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
 app.UseStaticFiles();
 
 app.UseRouting();
 
-
 app.UseAuthorization();
+app.MapControllers();
 
-// MVC Route
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Leads}/{action=Create}");
 
 app.Run();
