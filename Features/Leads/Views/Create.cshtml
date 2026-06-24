@@ -1,5 +1,4 @@
 ﻿@using ReplyFlow.Features.Leads.Enums
-@using Microsoft.AspNetCore.Mvc.Rendering
 @model ReplyFlow.Features.Leads.ViewModels.CreateLeadViewModel
 
 @{
@@ -11,38 +10,34 @@
 <form asp-action="Create" method="post">
 
     <div class="mb-3">
-        <label asp-for="Name" class="form-label"></label>
+        <label asp-for="Name" class="form-label">Name</label>
         <input asp-for="Name" class="form-control" />
         <span asp-validation-for="Name" class="text-danger"></span>
     </div>
 
     <div class="mb-3">
-        <label asp-for="Phone" class="form-label"></label>
+        <label asp-for="Phone" class="form-label">Phone</label>
         <input asp-for="Phone" class="form-control" />
         <span asp-validation-for="Phone" class="text-danger"></span>
     </div>
 
     <div class="mb-3">
-        <label asp-for="BusinessType" class="form-label"></label>
-        <select asp-for="BusinessType"
-                asp-items="Html.GetEnumSelectList<BusinessType>()"
-                class="form-select">
-
-            <option value="1">Select Business Type</option>
-
+        <label asp-for="BusinessType" class="form-label">Business Type</label>
+        <select asp-for="BusinessType" class="form-select">
+            <option value="">-- Select Business Type --</option>
+            @foreach (var item in Enum.GetValues(typeof(BusinessType)).Cast<BusinessType>())
+            {
+                <option value="@((int)item)">@item.ToString()</option>
+            }
         </select>
-
         <span asp-validation-for="BusinessType" class="text-danger"></span>
     </div>
 
-    <button type="submit" class="btn btn-primary">
-        Submit
-    </button>
+    <button type="submit" class="btn btn-primary">Submit</button>
 
 </form>
 
 @section Scripts
 {
     <partial name="_ValidationScriptsPartial" />
-    <!-- Subtype script removed as subtypes are not required -->
 }
