@@ -3,9 +3,11 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using ReplyFlow.Features.Leads.Handlers;
 using ReplyFlow.Features.Leads.Validations;
+using ReplyFlow.Shared.Comman.Authintication;
 using ReplyFlow.Shared.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
 
 builder.Services.AddControllersWithViews();
 
