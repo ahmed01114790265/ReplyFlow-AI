@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using ReplyFlow.Features.Auth.Commands;
 using ReplyFlow.Features.Auth.Factory;
 using ReplyFlow.Shared.Comman.Authintication;
+using ReplyFlow.Shared.Exceptions;
 using ReplyFlow.Shared.Persistence;
 
 namespace ReplyFlow.Features.Auth.Handlers
@@ -20,23 +21,26 @@ namespace ReplyFlow.Features.Auth.Handlers
 
         public async Task<Guid> Handle(  RegisterCommand command, CancellationToken cancellationToken)
         {
-            var phoneExists = await _context.Users
-                                    .AsNoTracking()
-                                      .AnyAsync(
-                                      user => user.PhoneNumber == command.PhoneNumber,
-                                         cancellationToken);
+            var phoneExists = false;
+                //await _context.Users
+            //                        .AsNoTracking()
+            //                          .AnyAsync(
+            //                          user => user.PhoneNumber == command.PhoneNumber,
+            //                             cancellationToken);
 
             if (phoneExists)
             {
-                throw new InvalidOperationException(
-                    "Phone number already exists.");
+                throw new DuplicatePhoneNumberException(command.PhoneNumber);
             }
 
             var passwordHash = _passwordHasher.HashPassword(command.Password);
 
             var user = RegisterFactory.CreateUser(command,passwordHash);
+            Console.WriteLine($"Command Phone = [{command.PhoneNumber}]");
+            Console.WriteLine($"User Phone = [{user.PhoneNumber}]");
 
             _context.Users.Add(user);
+            Console.WriteLine($"Before Save = [{user.PhoneNumber}]");
 
             await _context.SaveChangesAsync(cancellationToken);
 

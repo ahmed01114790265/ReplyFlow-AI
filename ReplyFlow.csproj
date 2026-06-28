@@ -10,8 +10,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Features\Auth\EndPoints\" />
-    <Folder Include="Features\Auth\Views\" />
     <Folder Include="Features\Auth\Queries\" />
     <Folder Include="Features\Credits\" />
     <Folder Include="Features\AI\" />
@@ -22,6 +20,7 @@
     <Folder Include="Features\WhatsApp\" />
     <Folder Include="Shared\HttpClient Factory\" />
     <Folder Include="Shared\Logging\" />
+    <Folder Include="Shared\MediatR pipeline\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -40,7 +39,6 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="10.0.9" />
     <PackageReference Include="Serilog.AspNetCore" Version="10.0.0" />
     <PackageReference Include="Serilog.Sinks.Console" Version="6.1.1" />
   </ItemGroup>
