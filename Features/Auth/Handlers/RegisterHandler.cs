@@ -21,12 +21,12 @@ namespace ReplyFlow.Features.Auth.Handlers
 
         public async Task<Guid> Handle(  RegisterCommand command, CancellationToken cancellationToken)
         {
-            var phoneExists = false;
-                //await _context.Users
-            //                        .AsNoTracking()
-            //                          .AnyAsync(
-            //                          user => user.PhoneNumber == command.PhoneNumber,
-            //                             cancellationToken);
+            var phoneExists =
+                await _context.Users
+                                    .AsNoTracking()
+                                      .AnyAsync(
+                                      user => user.PhoneNumber == command.PhoneNumber,
+                                         cancellationToken);
 
             if (phoneExists)
             {
@@ -36,11 +36,9 @@ namespace ReplyFlow.Features.Auth.Handlers
             var passwordHash = _passwordHasher.HashPassword(command.Password);
 
             var user = RegisterFactory.CreateUser(command,passwordHash);
-            Console.WriteLine($"Command Phone = [{command.PhoneNumber}]");
-            Console.WriteLine($"User Phone = [{user.PhoneNumber}]");
-
+            
             _context.Users.Add(user);
-            Console.WriteLine($"Before Save = [{user.PhoneNumber}]");
+            
 
             await _context.SaveChangesAsync(cancellationToken);
 

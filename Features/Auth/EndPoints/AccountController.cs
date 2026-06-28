@@ -34,12 +34,10 @@ namespace ReplyFlow.Features.Auth.EndPoints
                     "~/Features/Auth/Views/Register.cshtml",
                     model);
             }
-            Console.WriteLine($"Model Phone: [{model.PhoneNumber}]");
-            Console.WriteLine($"Model Password: [{model.Password}]");
+            
             try
             {
                 var command = RegisterFactory.CreateCommand(model);
-                Console.WriteLine($"Command Phone: [{command.PhoneNumber}]");
 
                 await _mediator.Send(command);
 
