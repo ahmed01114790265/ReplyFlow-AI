@@ -129,5 +129,125 @@ namespace ReplyFlow.Features.Auth.EndPoints
 
             return RedirectToAction(nameof(Login));
         }
+
+
+
+        [HttpGet("account/forgot-password")]
+        public IActionResult ForgotPassword()
+        {
+            return View(
+                "~/Features/Auth/Views/ForgotPassword.cshtml",
+                new ForgotPasswordViewModel());
+        }
+
+        [HttpPost("account/forgot-password")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(
+                    "~/Features/Auth/Views/ForgotPassword.cshtml",
+                    model);
+            }
+
+            var command = ForgotPasswordFactory.CreateCommand(model);
+
+            var result = await _mediator.Send(command);
+
+            if (!result.IsSuccess)
+            {
+                ModelState.AddModelError("", result.Error!);
+
+                return View(
+                    "~/Features/Auth/Views/ForgotPassword.cshtml",
+                    model);
+            }
+            return RedirectToAction(nameof(VerifyResetCode), new
+            {
+                phoneNumber = model.PhoneNumber
+            });
+        }
+
+
+        [HttpGet("account/verify-reset-code")]
+        public IActionResult VerifyResetCode(string phoneNumber)
+        {
+            return View(
+                "~/Features/Auth/Views/VerifyResetCode.cshtml",
+                new VerifyResetCodeViewModel
+                {
+                    PhoneNumber = phoneNumber
+                });
+        }
+
+        [HttpPost("account/verify-reset-code")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> VerifyResetCode( VerifyResetCodeViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(
+                    "~/Features/Auth/Views/VerifyResetCode.cshtml",
+                    model);
+            }
+
+            var command = VerifyResetCodeFactory.CreateCommand(model);
+
+            var result = await _mediator.Send(command);
+
+            if (!result.IsSuccess)
+            {
+                ModelState.AddModelError("", result.Error!);
+
+                return View(
+                    "~/Features/Auth/Views/VerifyResetCode.cshtml",
+                    model);
+            }
+
+            return RedirectToAction(nameof(ResetPassword), new
+            {
+                phoneNumber = model.PhoneNumber,
+                resetCode = model.ResetCode
+            });
+        }
+
+        [HttpGet("account/reset-password")]
+        public IActionResult ResetPassword( string phoneNumber,string resetCode)
+        {
+            return View(
+                "~/Features/Auth/Views/ResetPassword.cshtml",
+                new ResetPasswordViewModel
+                {
+                    PhoneNumber = phoneNumber,
+                    ResetCode = resetCode
+                });
+        }
+
+        [HttpPost("account/reset-password")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ResetPassword( ResetPasswordViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(
+                    "~/Features/Auth/Views/ResetPassword.cshtml",
+                    model);
+            }
+
+            var command =  ResetPasswordFactory.CreateCommand(model);
+
+            var result = await _mediator.Send(command);
+
+            if (!result.IsSuccess)
+            {
+                ModelState.AddModelError("", result.Error);
+                return View(
+                       "~/Features/Auth/Views/ResetPassword.cshtml",
+                                               model);
+            }
+
+            return RedirectToAction(nameof(Login));
+        }
     }
 }

@@ -38,10 +38,6 @@ namespace ReplyFlow.Features.Auth.Configurations
             builder.Property(x => x.CreatedAtUtc)
                    .IsRequired();
 
-            builder.Property(x => x.PasswordResetToken)
-                   .HasMaxLength(500);
-
-            builder.Property(x => x.PasswordResetTokenExpiryUtc);
         }
     }
 }
