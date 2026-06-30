@@ -1,5 +1,6 @@
 using FluentValidation;
 using MediatR;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using ReplyFlow.Features.Leads.Handlers;
 using ReplyFlow.Features.Leads.Validations;
@@ -27,8 +28,22 @@ builder.Services.AddValidatorsFromAssemblyContaining<CreateLeadValidator>();
 
 builder.Services.AddHttpClient();
 
-builder.Services.AddAuthorization();
+builder.Services
+    .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/account/login";
+        options.LogoutPath = "/account/logout";
+        options.AccessDeniedPath = "/account/access-denied";
 
+        options.Cookie.Name = "ReplyFlow.Auth";
+
+        options.SlidingExpiration = true;
+
+        options.ExpireTimeSpan = TimeSpan.FromDays(7);
+    });
+
+builder.Services.AddAuthorization();
 var app = builder.Build();
 
 if (!app.Environment.IsDevelopment())
@@ -42,7 +57,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
+app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 
