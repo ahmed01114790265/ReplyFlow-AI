@@ -1,8 +1,11 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using ReplyFlow.Features.Auth.Factory;
 using ReplyFlow.Features.Auth.ViewModels;
 using ReplyFlow.Shared.Exceptions;
+using System.Security.Claims;
 
 namespace ReplyFlow.Features.Auth.EndPoints
 {
@@ -67,6 +70,64 @@ namespace ReplyFlow.Features.Auth.EndPoints
         {
             return View(
                 "~/Features/Auth/Views/Login.cshtml");
+        }
+
+        [HttpPost("account/login")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Login(LoginViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(
+                    "~/Features/Auth/Views/Login.cshtml",
+                    model);
+            }
+
+            try
+            {
+                var command = LoginFactory.Create(model);
+
+                var userId = await _mediator.Send(command);
+
+                // Authentication Cookie
+                var claims = new List<Claim>
+                   {
+                      new(ClaimTypes.NameIdentifier, userId.ToString())
+                   };
+                var identity = new ClaimsIdentity(claims,CookieAuthenticationDefaults.AuthenticationScheme);
+
+                var principal = new ClaimsPrincipal(identity);
+
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
+                  principal,new AuthenticationProperties
+                {
+                  IsPersistent = model.RememberMe
+                });
+                //in future return views
+                //return RedirectToAction("/");
+                return Content("Login Successful");
+            }
+            catch (InvalidLoginException ex)
+            {
+                ModelState.AddModelError(
+                    string.Empty,
+                    ex.Message);
+
+                return View(
+                    "~/Features/Auth/Views/Login.cshtml",
+                    model);
+            }
+        }
+
+        //infuture put it in layout
+        [HttpPost("account/logout")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync(
+                CookieAuthenticationDefaults.AuthenticationScheme);
+
+            return RedirectToAction(nameof(Login));
         }
     }
 }

@@ -1,9 +1,63 @@
-﻿@{
+﻿@model ReplyFlow.Features.Auth.ViewModels.LoginViewModel
+
+@{
     ViewData["Title"] = "Login";
 }
 
 <h2>Login</h2>
 
-<p>
-    Login feature is coming next...
-</p>
+<form asp-action="Login"
+      asp-controller="Account"
+      method="post">
+
+    @Html.AntiForgeryToken()
+
+    <div asp-validation-summary="ModelOnly"
+         class="text-danger">
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="PhoneNumber"></label>
+
+        <input asp-for="PhoneNumber"
+               class="form-control" />
+
+        <span asp-validation-for="PhoneNumber"
+              class="text-danger">
+        </span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Password"></label>
+
+        <input asp-for="Password"
+               type="password"
+               class="form-control" />
+
+        <span asp-validation-for="Password"
+              class="text-danger">
+        </span>
+    </div>
+
+    <div class="form-check mb-3">
+
+        <input asp-for="RememberMe"
+               class="form-check-input" />
+
+        <label asp-for="RememberMe"
+               class="form-check-label">
+        </label>
+
+    </div>
+
+    <button type="submit"
+            class="btn btn-primary">
+        Login
+    </button>
+
+</form>
+
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial" />
+}
