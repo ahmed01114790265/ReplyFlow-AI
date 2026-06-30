@@ -18,11 +18,14 @@ namespace ReplyFlow.Features.Auth.Entites
 
         public DateTime? LastLoginAtUtc { get; private set; }
 
-        public string? PasswordResetToken { get; private set; }
+        // OTP
+        public string? ResetCode { get; private set; }
 
-        public DateTime? PasswordResetTokenExpiryUtc { get; private set; }
+        public DateTime? ResetCodeExpiryUtc { get; private set; }
 
-        private User() { }
+        private User()
+        {
+        }
 
         public User(string phoneNumber, string passwordHash)
         {
@@ -44,24 +47,29 @@ namespace ReplyFlow.Features.Auth.Entites
             IsActive = false;
         }
 
-        public void SetPasswordResetToken(
-            string token,
-            DateTime expiryUtc)
+        public void SetResetCode(string resetCode, DateTime expiryUtc)
         {
-            PasswordResetToken = token;
-            PasswordResetTokenExpiryUtc = expiryUtc;
+            ResetCode = resetCode;
+            ResetCodeExpiryUtc = expiryUtc;
         }
 
-        public void ClearPasswordResetToken()
+        public bool IsResetCodeValid(string resetCode)
         {
-            PasswordResetToken = null;
-            PasswordResetTokenExpiryUtc = null;
+            return ResetCode == resetCode &&
+                   ResetCodeExpiryUtc.HasValue &&
+                   ResetCodeExpiryUtc.Value > DateTime.UtcNow;
+        }
+
+        public void ClearResetCode()
+        {
+            ResetCode = null;
+            ResetCodeExpiryUtc = null;
         }
 
         public void ChangePassword(string passwordHash)
         {
             PasswordHash = passwordHash;
-            ClearPasswordResetToken();
+            ClearResetCode();
         }
     }
 }
