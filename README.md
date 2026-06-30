@@ -47,11 +47,6 @@ Run locally
 - Features/Auth/ViewModels - ViewModel types for forms and views
 - Shared - Common utilities, exceptions, persistence and result wrapper types
 
-## Diagrams
-
-The repository includes an authentication diagram in PlantUML format:
-
-- `auth_authentication_diagram.puml` — PlantUML diagram of AccountController and ForgotPasswordHandler relationships.
 
 ## Contributing
 
